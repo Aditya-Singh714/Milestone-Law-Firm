@@ -10,7 +10,14 @@ dotenv.config();
 const app = express();
 
 // Middleware
-app.use(cors({ origin: process.env.FRONTEND_URL || "http://localhost:5173" })); // safer in prod
+app.use(
+  cors({
+    origin: "https://milestone-law-firm.vercel.app", // include https://
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true, // if you need cookies or auth headers
+  })
+);
+
 app.use(express.json());
 
 // Routes
