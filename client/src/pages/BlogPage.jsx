@@ -13,7 +13,7 @@ const BlogPage = () => {
   // ✅ Fetch posts from backend
   useEffect(() => {
     axios
-      .get("http://localhost:5000/api/blogs")
+      .get("https://milestone-law-firm.onrender.com/api/blogs")
       .then((res) => setPosts(res.data))
       .catch((err) => console.error("Error fetching blogs:", err));
   }, []);
@@ -23,11 +23,14 @@ const BlogPage = () => {
     if (!newPost.title || !newPost.content || !newPost.author) return;
 
     try {
-      const res = await axios.post("http://localhost:5000/api/blogs", {
-        title: newPost.title,
-        content: newPost.content,
-        author: newPost.author, // ✅ must include author
-      });
+      const res = await axios.post(
+        "https://milestone-law-firm.onrender.com/api/blogs",
+        {
+          title: newPost.title,
+          content: newPost.content,
+          author: newPost.author, // ✅ must include author
+        }
+      );
       setPosts([...posts, res.data]);
       setNewPost({ title: "", content: "", author: "" });
     } catch (err) {
@@ -38,7 +41,9 @@ const BlogPage = () => {
   // ✅ Delete Post
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:5000/api/blogs/${id}`);
+      await axios.delete(
+        `https://milestone-law-firm.onrender.com/api/blogs/${id}`
+      );
       setPosts(posts.filter((p) => p._id !== id));
     } catch (err) {
       console.error("Error deleting blog:", err);
@@ -49,7 +54,7 @@ const BlogPage = () => {
   const handleSaveEdit = async () => {
     try {
       const res = await axios.put(
-        `http://localhost:5000/api/blogs/${editingPost._id}`,
+        `https://milestone-law-firm.onrender.com/api/blogs/${editingPost._id}`,
         editingPost
       );
       setPosts(posts.map((p) => (p._id === editingPost._id ? res.data : p)));

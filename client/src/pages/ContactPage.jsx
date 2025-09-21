@@ -41,7 +41,7 @@ const ContactPage = () => {
 
     try {
       const res = await axios.post(
-        "http://localhost:5000/api/contact",
+        "https://milestone-law-firm.onrender.com/api/contact",
         formData
       );
       setStatus({ type: "success", message: res.data.message });
