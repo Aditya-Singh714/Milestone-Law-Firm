@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Phone, Mail, MapPin, Clock } from "lucide-react";
 
@@ -13,6 +14,8 @@ const ContactPage = () => {
   });
   const [status, setStatus] = useState({ type: "", message: "" });
   const [loading, setLoading] = useState(false);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     setIsLoaded(true);
@@ -44,6 +47,7 @@ const ContactPage = () => {
         "https://milestone-law-firm.onrender.com/api/contact",
         formData
       );
+      navigate("/thank-you");
       setStatus({ type: "success", message: res.data.message });
       setFormData({
         firstName: "",
@@ -70,12 +74,12 @@ const ContactPage = () => {
   };
 
   const practiceAreas = [
-    "Corporate Law",
+    "Civil Law",
     "Criminal Defense",
     "Personal Injury",
     "Real Estate Law",
     "Family Law",
-    "Immigration Law",
+    "Revenue Law",
   ];
 
   return (

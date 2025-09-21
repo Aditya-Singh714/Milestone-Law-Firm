@@ -5,6 +5,7 @@ import ContactPage from "./pages/ContactPage";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import BlogPage from "./pages/BlogPage";
+import ThankYouPage from "./pages/ThankyouPage";
 
 const App = () => {
   return (
@@ -15,6 +16,7 @@ const App = () => {
         <Route path="/about" element={<AboutPage />} />
         <Route path="/contact" element={<ContactPage />} />
         <Route path="/blog" element={<BlogPage />} />
+        <Route path="/thank-you" element={<ThankYouPage />} />
       </Routes>
       <Footer />
     </>
