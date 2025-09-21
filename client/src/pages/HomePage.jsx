@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
-import { Scale, ChevronRight } from "lucide-react";
+import { Scale, ChevronRight, Gavel, FileText } from "lucide-react"; // Added icons for Civil & Revenue Law
 
 const practiceAreas = [
-  "Corporate Law",
-  "Criminal Defense",
-  "Personal Injury",
-  "Real Estate Law",
-  "Family Law",
-  "Immigration Law",
+  { name: "Civil Law", icon: Gavel },
+  { name: "Criminal Defense", icon: Scale },
+  { name: "Personal Injury", icon: Scale },
+  { name: "Real Estate Law", icon: Scale },
+  { name: "Family Law", icon: Scale },
+  { name: "Revenue Law", icon: FileText },
 ];
 
 const HomePage = ({ onNavigate }) => {
@@ -75,28 +75,31 @@ const HomePage = ({ onNavigate }) => {
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {practiceAreas.map((area, index) => (
-              <div
-                key={area}
-                className={`bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transform transition-all duration-500 hover:-translate-y-2 ${
-                  isLoaded
-                    ? "opacity-100 translate-y-0"
-                    : "opacity-0 translate-y-10"
-                }`}
-                style={{ transitionDelay: `${index * 100}ms` }}
-              >
-                <div className="w-12 h-12 bg-amber-100 rounded-lg flex items-center justify-center mb-6">
-                  <Scale className="w-6 h-6 text-amber-600" />
+            {practiceAreas.map((area, index) => {
+              const Icon = area.icon;
+              return (
+                <div
+                  key={area.name}
+                  className={`bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transform transition-all duration-500 hover:-translate-y-2 ${
+                    isLoaded
+                      ? "opacity-100 translate-y-0"
+                      : "opacity-0 translate-y-10"
+                  }`}
+                  style={{ transitionDelay: `${index * 100}ms` }}
+                >
+                  <div className="w-12 h-12 bg-amber-100 rounded-lg flex items-center justify-center mb-6">
+                    <Icon className="w-6 h-6 text-amber-600" />
+                  </div>
+                  <h3 className="text-xl font-semibold text-slate-800 mb-4">
+                    {area.name}
+                  </h3>
+                  <p className="text-gray-600">
+                    Expert legal services in {area.name.toLowerCase()}, helping
+                    you navigate complex challenges with confidence.
+                  </p>
                 </div>
-                <h3 className="text-xl font-semibold text-slate-800 mb-4">
-                  {area}
-                </h3>
-                <p className="text-gray-600">
-                  Expert legal services in {area.toLowerCase()}, helping you
-                  navigate complex challenges with confidence.
-                </p>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </div>
