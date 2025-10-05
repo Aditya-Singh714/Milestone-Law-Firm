@@ -1,11 +1,11 @@
-import { Routes, Route, Link } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import HomePage from "./pages/HomePage";
 import AboutPage from "./pages/AboutPage";
 import ContactPage from "./pages/ContactPage";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
-import BlogPage from "./pages/BlogPage";
-import ThankYouPage from "./pages/ThankyouPage";
+import PublicBlogPage from "./pages/PublicBlogPage";
+import BlogAdminPage from "./pages/BlogAdminPage"; // renamed from BlogPage
 
 const App = () => {
   return (
@@ -15,8 +15,8 @@ const App = () => {
         <Route path="/" element={<HomePage />} />
         <Route path="/about" element={<AboutPage />} />
         <Route path="/contact" element={<ContactPage />} />
-        <Route path="/blog" element={<BlogPage />} />
-        <Route path="/thank-you" element={<ThankYouPage />} />
+        <Route path="/blog" element={<PublicBlogPage />} /> {/* Visitors */}
+        <Route path="/admin/blog" element={<BlogAdminPage />} /> {/* Admin */}
       </Routes>
       <Footer />
     </>

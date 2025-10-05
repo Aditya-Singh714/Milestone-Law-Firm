@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import AdminLoginPage from "./AdminLoginPage";
 
-const BlogPage = () => {
+const BlogAdminPage = () => {
   const [posts, setPosts] = useState([]);
   const [newPost, setNewPost] = useState({
     title: "",
@@ -9,6 +10,7 @@ const BlogPage = () => {
     author: "",
   });
   const [editingPost, setEditingPost] = useState(null);
+  const [isAdmin, setIsAdmin] = useState(!!localStorage.getItem("token"));
 
   // ✅ Fetch posts from backend
   useEffect(() => {
@@ -25,16 +27,15 @@ const BlogPage = () => {
     try {
       const res = await axios.post(
         "https://milestone-law-firm.onrender.com/api/blogs",
+        newPost,
         {
-          title: newPost.title,
-          content: newPost.content,
-          author: newPost.author, // ✅ must include author
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
         }
       );
-      setPosts([...posts, res.data]);
+      setPosts([res.data, ...posts]);
       setNewPost({ title: "", content: "", author: "" });
     } catch (err) {
-      console.error("Error creating blog:", err.response.data); // log response data
+      console.error("Error creating blog:", err.response?.data);
     }
   };
 
@@ -42,7 +43,10 @@ const BlogPage = () => {
   const handleDelete = async (id) => {
     try {
       await axios.delete(
-        `https://milestone-law-firm.onrender.com/api/blogs/${id}`
+        `https://milestone-law-firm.onrender.com/api/blogs/${id}`,
+        {
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        }
       );
       setPosts(posts.filter((p) => p._id !== id));
     } catch (err) {
@@ -55,7 +59,10 @@ const BlogPage = () => {
     try {
       const res = await axios.put(
         `https://milestone-law-firm.onrender.com/api/blogs/${editingPost._id}`,
-        editingPost
+        editingPost,
+        {
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        }
       );
       setPosts(posts.map((p) => (p._id === editingPost._id ? res.data : p)));
       setEditingPost(null);
@@ -64,12 +71,29 @@ const BlogPage = () => {
     }
   };
 
+  // ✅ Logout
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    setIsAdmin(false);
+  };
+
+  // ✅ If not logged in → show login page
+  if (!isAdmin) {
+    return <AdminLoginPage onLogin={() => setIsAdmin(true)} />;
+  }
+
   return (
     <div className="min-h-screen py-12 bg-gray-50">
       <div className="max-w-5xl mx-auto px-6">
-        <h1 className="text-4xl font-bold text-slate-800 mb-8 text-center">
-          Blog
-        </h1>
+        <div className="flex justify-between items-center mb-8">
+          <h1 className="text-4xl font-bold text-slate-800">Blog</h1>
+          <button
+            onClick={handleLogout}
+            className="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700"
+          >
+            Logout
+          </button>
+        </div>
 
         {/* Add New Post */}
         <div className="bg-white p-6 rounded-xl shadow mb-8">
@@ -137,10 +161,7 @@ const BlogPage = () => {
                     type="text"
                     value={editingPost.author}
                     onChange={(e) =>
-                      setEditingPost({
-                        ...editingPost,
-                        author: e.target.value,
-                      })
+                      setEditingPost({ ...editingPost, author: e.target.value })
                     }
                     className="w-full p-3 border rounded mb-4"
                   />
@@ -186,4 +207,4 @@ const BlogPage = () => {
   );
 };
 
-export default BlogPage;
+export default BlogAdminPage;

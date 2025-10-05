@@ -1,20 +1,21 @@
 import express from "express";
 import Blog from "../models/Blog.js";
+import authMiddleware from "../middlewares/authMiddleware.js";
 
 const router = express.Router();
 
-// Get all blogs
+// ✅ Get all blogs (public)
 router.get("/", async (req, res) => {
   try {
-    const blogs = await Blog.find().sort({ createdAt: -1 }); // latest first
+    const blogs = await Blog.find().sort({ createdAt: -1 });
     res.json(blogs);
   } catch (err) {
     res.status(500).json({ message: "Server error" });
   }
 });
 
-// Create blog (POST route)
-router.post("/", async (req, res) => {
+// ✅ Create blog (admin only)
+router.post("/", authMiddleware, async (req, res) => {
   const { title, content, author } = req.body;
   if (!title || !content) {
     return res.status(400).json({ message: "Title and content are required" });
@@ -28,8 +29,8 @@ router.post("/", async (req, res) => {
   }
 });
 
-// Update a blog
-router.put("/:id", async (req, res) => {
+// ✅ Update blog (admin only)
+router.put("/:id", authMiddleware, async (req, res) => {
   try {
     const blog = await Blog.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
@@ -41,8 +42,8 @@ router.put("/:id", async (req, res) => {
   }
 });
 
-// Delete a blog
-router.delete("/:id", async (req, res) => {
+// ✅ Delete blog (admin only)
+router.delete("/:id", authMiddleware, async (req, res) => {
   try {
     const blog = await Blog.findByIdAndDelete(req.params.id);
     if (!blog) return res.status(404).json({ message: "Blog not found" });

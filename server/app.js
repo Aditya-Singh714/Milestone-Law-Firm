@@ -5,6 +5,7 @@ import dotenv from "dotenv";
 
 import blogRoutes from "./routes/blogRoutes.js";
 import contactRoutes from "./routes/contactRoutes.js";
+import authRoutes from "./routes/authRoutes.js";
 
 dotenv.config();
 const app = express();
@@ -23,6 +24,7 @@ app.use(express.json());
 // Routes
 app.use("/api/blogs", blogRoutes);
 app.use("/api/contact", contactRoutes);
+app.use("/api/auth", authRoutes);
 
 // Error Handling Middleware
 app.use((err, req, res, next) => {
